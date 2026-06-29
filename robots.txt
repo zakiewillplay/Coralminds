@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://coralminds.in/sitemap.xml
