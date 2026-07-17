@@ -4,9 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coral Minds | The Education Revolution</title>
+
+    <!-- DNS prefetch & preconnect to image CDN for instant TLS negotiation -->
+    <link rel="dns-prefetch" href="https://i.ibb.co">
+    <link rel="preconnect" href="https://i.ibb.co" crossorigin>
+
+    <!-- Preload critical above‑the‑fold images with highest priority -->
+    <link rel="preload" as="image" href="https://i.ibb.co/GQ3dnS09/1782387803302.png" fetchpriority="high">
+    <link rel="preload" as="image" href="https://i.ibb.co/hxmpp45V/IMG-20260624-WA0014.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="https://i.ibb.co/RTDYW7bg/IMG-20260625-WA0010.jpg" fetchpriority="high">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         :root {
             --primary: #0b1e33;
@@ -20,16 +33,23 @@
             --text: #0b1e33;
             --text-light: #475569;
             --border: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-            --shadow-md: 0 10px 25px rgba(0,0,0,0.05);
-            --shadow-lg: 0 20px 50px rgba(0,0,0,0.08);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.08);
             --radius: 20px;
             --radius-sm: 14px;
             --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
         body {
             font-family: 'DM Sans', sans-serif;
             background: var(--bg);
@@ -38,12 +58,86 @@
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
         }
-        ::selection { background: var(--accent); color: #fff; }
+        ::selection {
+            background: var(--accent);
+            color: #fff;
+        }
 
+        /* ─────────────────────────────────── */
+        /*  Preloader / Loading Screen        */
+        /* ─────────────────────────────────── */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #f5f9ff 0%, #ffffff 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            opacity: 1;
+            visibility: visible;
+        }
+        body.loaded #preloader {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 24px;
+            animation: float 2.5s ease-in-out infinite;
+        }
+        .loader-logo img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+        }
+        .loader-spinner {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .loader-dot {
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulseDot 1.4s ease-in-out infinite both;
+        }
+        .loader-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loader-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loader-dot:nth-child(3) { animation-delay: 0s; }
+
+        .loader-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-align: center;
+            max-width: 300px;
+            animation: fadeText 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+            40% { transform: scale(1.2); opacity: 1; }
+        }
+        @keyframes fadeText {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-12px); }
         }
+
+        /* Rest of the CSS – unchanged to preserve design */
         @keyframes floatStat {
             0%, 100% { transform: translateY(0) scale(1); }
             50% { transform: translateY(-8px) scale(1.03); }
@@ -51,6 +145,10 @@
         @keyframes pulseGlow {
             0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
             50% { box-shadow: 0 0 0 15px rgba(37,99,235,0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .fade-up {
             opacity: 0;
@@ -73,125 +171,59 @@
         .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .brand img { width: 46px; height: 46px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; transition: var(--transition); }
         .brand:hover img { transform: rotate(-5deg) scale(1.05); }
-        .brand-text h2 {
-            font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary);
-            letter-spacing: 1px; line-height: 1.2;
-        }
-        .brand-text span {
-            font-size: 0.65rem; color: var(--accent); letter-spacing: 2px;
-            text-transform: uppercase; font-weight: 700;
-        }
+        .brand-text h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary); letter-spacing: 1px; line-height: 1.2; }
+        .brand-text span { font-size: 0.65rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
         .nav-links { display: flex; list-style: none; gap: 32px; align-items: center; }
-        .nav-links a {
-            text-decoration: none; color: var(--text-light); font-weight: 500; font-size: 0.9rem;
-            transition: color 0.3s; position: relative;
-        }
-        .nav-links a::after {
-            content: ''; position: absolute; bottom: -6px; left: 0; width: 0; height: 2px;
-            background: var(--accent); transition: width 0.3s;
-        }
+        .nav-links a { text-decoration: none; color: var(--text-light); font-weight: 500; font-size: 0.9rem; transition: color 0.3s; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
         .nav-links a:hover { color: var(--accent); }
         .nav-links a:hover::after { width: 100%; }
-        .nav-cta {
-            background: var(--accent) !important; color: #fff !important; padding: 10px 24px !important;
-            border-radius: 50px !important; font-weight: 600 !important; transition: var(--transition) !important;
-            box-shadow: 0 4px 15px rgba(37,99,235,0.25);
-        }
-        .nav-cta:hover {
-            background: var(--accent-dark) !important; transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(37,99,235,0.4);
-        }
+        .nav-cta { background: var(--accent) !important; color: #fff !important; padding: 10px 24px !important; border-radius: 50px !important; font-weight: 600 !important; transition: var(--transition) !important; box-shadow: 0 4px 15px rgba(37,99,235,0.25); }
+        .nav-cta:hover { background: var(--accent-dark) !important; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(37,99,235,0.4); }
         .nav-cta::after { display: none !important; }
-        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1001; }
+        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1001; background: none; border: none; padding: 4px; }
         .hamburger span { width: 28px; height: 2.5px; background: var(--primary); border-radius: 5px; transition: var(--transition); }
 
-        .hero {
-            min-height: 100vh; display: flex; align-items: center;
-            background: url('https://i.ibb.co/GQ3dnS09/1782387803302.png') center/cover no-repeat;
-            position: relative; padding: 140px 40px 80px;
-        }
-        .hero::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(135deg, rgba(37,99,235,0.75) 0%, rgba(59,130,246,0.65) 100%);
-        }
-        .hero-content {
-            max-width: 1300px; margin: 0 auto; width: 100%;
-            display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center;
-            position: relative; z-index: 2; color: #fff;
-        }
-        .hero-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3); padding: 8px 20px; border-radius: 50px;
-            font-weight: 600; font-size: 0.85rem; color: #fff; margin-bottom: 25px;
-            animation: pulseGlow 2s infinite;
-        }
+        .hero { min-height: 100vh; display: flex; align-items: center; background: url('https://i.ibb.co/GQ3dnS09/1782387803302.png') center/cover no-repeat; position: relative; padding: 140px 40px 80px; }
+        .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(37,99,235,0.75) 0%, rgba(59,130,246,0.65) 100%); }
+        .hero-content { max-width: 1300px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: center; position: relative; z-index: 2; color: #fff; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; color: #fff; margin-bottom: 25px; animation: pulseGlow 2s infinite; }
         .hero-badge .dot { width: 9px; height: 9px; background: #22c55e; border-radius: 50%; }
-        .hero h1 {
-            font-family: 'Playfair Display', serif; font-size: 4.4rem; color: #fff;
-            line-height: 1.1; margin-bottom: 22px; letter-spacing: -0.5px;
-        }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 4.4rem; color: #fff; line-height: 1.1; margin-bottom: 22px; letter-spacing: -0.5px; }
         .hero h1 span { color: #fff; }
-        .hero p {
-            font-size: 1.2rem; color: rgba(255,255,255,0.9); max-width: 500px;
-            margin-bottom: 35px; line-height: 1.8;
-        }
+        .hero p { font-size: 1.2rem; color: rgba(255,255,255,0.9); max-width: 500px; margin-bottom: 35px; line-height: 1.8; }
         .hero-btns { display: flex; gap: 15px; flex-wrap: wrap; }
-        .btn {
-            padding: 15px 34px; border-radius: 50px; font-weight: 700; font-size: 1rem;
-            text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
-            transition: var(--transition); cursor: pointer; border: none;
-        }
+        .btn { padding: 15px 34px; border-radius: 50px; font-weight: 700; font-size: 1rem; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: var(--transition); cursor: pointer; border: none; }
         .btn-fill { background: #fff; color: var(--accent); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
         .btn-fill:hover { background: #eef4ff; transform: translateY(-4px); box-shadow: 0 15px 35px rgba(255,255,255,0.3); }
         .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.7); }
         .btn-outline:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
         .hero-visual { display: flex; justify-content: center; position: relative; }
-        .hero-img-main {
-            width: 400px; height: 400px; border-radius: 50%; object-fit: cover;
-            border: 6px solid rgba(255,255,255,0.5); box-shadow: 0 25px 60px rgba(0,0,0,0.3);
-            animation: float 6s ease-in-out infinite;
-        }
-        .hero-stat {
-            position: absolute; background: rgba(255,255,255,0.2); backdrop-filter: blur(25px);
-            border-radius: 18px; padding: 20px 28px; border: 1px solid rgba(255,255,255,0.3);
-            text-align: center; color: #fff; animation: floatStat 5s ease-in-out infinite;
-        }
+        .hero-img-main { width: 400px; height: 400px; border-radius: 50%; object-fit: cover; border: 6px solid rgba(255,255,255,0.5); box-shadow: 0 25px 60px rgba(0,0,0,0.3); animation: float 6s ease-in-out infinite; }
+        .hero-stat { position: absolute; background: rgba(255,255,255,0.2); backdrop-filter: blur(25px); border-radius: 18px; padding: 20px 28px; border: 1px solid rgba(255,255,255,0.3); text-align: center; color: #fff; animation: floatStat 5s ease-in-out infinite; }
         .hero-stat.top { top: 15px; right: -35px; }
         .hero-stat.bottom { bottom: 30px; left: -35px; animation-delay: 1s; }
         .hero-stat .num { font-family: 'Playfair Display', serif; font-size: 2.4rem; line-height: 1; }
         .hero-stat .lbl { font-size: 0.8rem; opacity: 0.9; margin-top: 4px; }
 
         .enquiry-section { background: var(--bg-gray); padding: 70px 40px; }
-        .enquiry-card {
-            max-width: 750px; margin: 0 auto; background: #fff;
-            border-radius: var(--radius); padding: 45px 40px;
-            box-shadow: var(--shadow-lg); text-align: center;
-        }
-        .enquiry-card h3 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary); margin-bottom: 6px; }
-        .enquiry-card .subtitle { color: var(--text-light); margin-bottom: 28px; }
-        .enquiry-card .form-group { margin-bottom: 18px; text-align: left; }
-        .enquiry-card label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
-        .enquiry-card input, .enquiry-card select, .enquiry-card textarea {
-            width: 100%; padding: 13px 16px; border: 2px solid var(--border); border-radius: 12px;
-            font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: var(--transition);
-            background: var(--bg-gray);
-        }
-        .enquiry-card input:focus, .enquiry-card select:focus, .enquiry-card textarea:focus {
-            border-color: var(--accent); outline: none; background: #fff;
-            box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
-        }
-        .btn-submit {
-            width: 100%; padding: 15px; background: var(--accent); color: #fff;
-            font-weight: 700; border: none; border-radius: 12px; font-size: 1rem;
-            cursor: pointer; transition: var(--transition); margin-top: 8px;
-        }
+        .enquiry-card, .contact-form-card { max-width: 750px; margin: 0 auto; background: #fff; border-radius: var(--radius); padding: 45px 40px; box-shadow: var(--shadow-lg); }
+        .enquiry-card { text-align: center; }
+        .enquiry-card h3, .contact-form-card h3 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary); margin-bottom: 6px; }
+        .enquiry-card .subtitle, .contact-form-card .subtitle { color: var(--text-light); margin-bottom: 28px; font-size: 0.9rem; }
+        .form-group { margin-bottom: 18px; text-align: left; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 13px 16px; border: 2px solid var(--border); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: var(--transition); background: var(--bg-gray); }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(37,99,235,0.08); }
+        .btn-submit { width: 100%; padding: 15px; background: var(--accent); color: #fff; font-weight: 700; border: none; border-radius: 12px; font-size: 1rem; cursor: pointer; transition: var(--transition); margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-submit:hover { background: var(--accent-dark); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+        .btn-submit .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+        .btn-submit.loading .spinner { display: inline-block; }
+        .btn-submit.loading .btn-text { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .story-banner {
-            height: 480px; background: url('https://i.ibb.co/RTDYW7bg/IMG-20260625-WA0010.jpg') center/cover no-repeat;
-            display: flex; align-items: center; justify-content: center; position: relative;
-        }
+        .story-banner { height: 480px; background: url('https://i.ibb.co/RTDYW7bg/IMG-20260625-WA0010.jpg') center/cover no-repeat; display: flex; align-items: center; justify-content: center; position: relative; }
         .story-banner::after { content: ''; position: absolute; inset: 0; background: rgba(11,30,51,0.65); }
         .story-banner .banner-text { position: relative; z-index: 2; text-align: center; color: #fff; }
         .story-banner .banner-text h2 { font-family: 'Playfair Display', serif; font-size: 3.5rem; margin-bottom: 12px; }
@@ -201,61 +233,36 @@
         .section-gray { background: var(--bg-gray); }
         .container { max-width: 1250px; margin: 0 auto; }
         .sec-header { text-align: center; margin-bottom: 65px; }
-        .sec-label {
-            display: inline-block; color: var(--accent); font-weight: 700; letter-spacing: 3px;
-            text-transform: uppercase; font-size: 0.8rem; margin-bottom: 14px;
-        }
+        .sec-label { display: inline-block; color: var(--accent); font-weight: 700; letter-spacing: 3px; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 14px; }
         .sec-title { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--primary); margin-bottom: 14px; }
         .sec-line { width: 70px; height: 4px; background: var(--accent); margin: 0 auto; border-radius: 5px; }
 
         .about-row { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .founder-photo {
-            width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: var(--radius);
-            box-shadow: var(--shadow-lg); border: 1px solid var(--border);
-        }
+        .founder-photo { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow-lg); border: 1px solid var(--border); background: #e2e8f0; }
         .about-text p { color: var(--text-light); margin-bottom: 20px; font-size: 1.08rem; }
         .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
-        .feature-item {
-            background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);
-            padding: 22px 18px; text-align: center; transition: var(--transition);
-        }
+        .feature-item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 22px 18px; text-align: center; transition: var(--transition); }
         .feature-item:hover { border-color: var(--accent); box-shadow: var(--shadow-md); transform: translateY(-5px); }
         .feature-item .ficon { font-size: 2rem; margin-bottom: 10px; }
         .feature-item h4 { font-size: 1rem; margin-bottom: 4px; }
         .feature-item span { font-size: 0.85rem; color: var(--text-light); }
 
         .counter-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-top: 55px; }
-        .counter-box {
-            background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);
-            padding: 30px 20px; text-align: center; transition: var(--transition);
-        }
+        .counter-box { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 30px 20px; text-align: center; transition: var(--transition); }
         .counter-box:hover { box-shadow: var(--shadow-md); border-color: var(--accent); transform: translateY(-3px); }
         .counter-box .cnum { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--accent); line-height: 1; }
         .counter-box .clbl { color: var(--text-light); font-size: 0.95rem; margin-top: 8px; }
 
         .faculty-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
-        .fac-card {
-            background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
-            padding: 32px 22px; text-align: center; transition: var(--transition);
-        }
+        .fac-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 22px; text-align: center; transition: var(--transition); }
         .fac-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateY(-8px); }
-        .fac-avatar {
-            width: 85px; height: 85px; border-radius: 50%; object-fit: cover;
-            margin: 0 auto 18px; border: 3px solid var(--border);
-        }
+        .fac-avatar { width: 85px; height: 85px; border-radius: 50%; object-fit: cover; margin: 0 auto 18px; border: 3px solid var(--border); background: #e2e8f0; }
         .fac-card h4 { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
         .fac-card .subj { color: var(--accent); font-weight: 600; font-size: 0.85rem; }
 
         .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 22px; }
-        .course-card {
-            background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
-            padding: 38px 30px; transition: var(--transition); position: relative; overflow: hidden;
-        }
-        .course-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
-            background: linear-gradient(90deg, var(--accent), var(--accent-light));
-            transform: scaleX(0); transition: transform 0.5s;
-        }
+        .course-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 38px 30px; transition: var(--transition); position: relative; overflow: hidden; }
+        .course-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(90deg, var(--accent), var(--accent-light)); transform: scaleX(0); transition: transform 0.5s; }
         .course-card:hover::before { transform: scaleX(1); }
         .course-card:hover { box-shadow: var(--shadow-lg); border-color: transparent; transform: translateY(-6px); }
         .course-icon { font-size: 2.8rem; margin-bottom: 18px; }
@@ -265,47 +272,27 @@
         .tag { background: var(--bg-gray); padding: 5px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; color: var(--primary); }
 
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .gallery-item {
-            aspect-ratio: 4/3; border-radius: var(--radius-sm); overflow: hidden;
-            box-shadow: var(--shadow-sm); transition: var(--transition);
-        }
+        .gallery-item { aspect-ratio: 4/3; border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow-sm); transition: var(--transition); background: #e2e8f0; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s; }
         .gallery-item:hover img { transform: scale(1.08); }
         .gallery-item:hover { box-shadow: var(--shadow-md); }
 
         .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
-        .test-card {
-            background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
-            padding: 32px 28px; transition: var(--transition); text-align: center;
-        }
+        .test-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 28px; transition: var(--transition); text-align: center; }
         .test-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateY(-6px); }
-        .test-avatar {
-            width: 70px; height: 70px; border-radius: 50%; object-fit: cover;
-            border: 3px solid var(--accent-light); margin-bottom: 18px;
-        }
+        .test-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-light); margin-bottom: 18px; background: #e2e8f0; }
         .test-stars { color: #f59e0b; font-size: 1.1rem; margin-bottom: 14px; }
         .test-text { font-style: italic; color: var(--text-light); margin-bottom: 18px; line-height: 1.7; }
         .test-auth { font-weight: 700; }
         .test-role { color: var(--text-light); font-size: 0.85rem; }
 
-        /* FAQ */
         .faq-accordion { max-width: 900px; margin: 0 auto; }
-        .faq-item {
-            background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);
-            margin-bottom: 12px; overflow: hidden; transition: var(--transition);
-        }
-        .faq-question {
-            width: 100%; padding: 20px 24px; display: flex; justify-content: space-between;
-            align-items: center; background: none; border: none; font-size: 1rem; font-weight: 600;
-            color: var(--primary); cursor: pointer; text-align: left; transition: var(--transition);
-        }
+        .faq-item { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 12px; overflow: hidden; transition: var(--transition); }
+        .faq-question { width: 100%; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; background: none; border: none; font-size: 1rem; font-weight: 600; color: var(--primary); cursor: pointer; text-align: left; transition: var(--transition); font-family: 'DM Sans', sans-serif; }
         .faq-question:hover { background: var(--bg-gray); }
-        .faq-question .faq-icon { font-size: 1.2rem; transition: transform 0.3s; color: var(--accent); }
-        .faq-answer {
-            max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease;
-            padding: 0 24px; color: var(--text-light); font-size: 0.95rem; line-height: 1.7;
-        }
-        .faq-item.active .faq-answer { max-height: 200px; padding: 0 24px 20px; }
+        .faq-question .faq-icon { font-size: 1.2rem; transition: transform 0.3s; color: var(--accent); flex-shrink: 0; margin-left: 12px; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 24px; color: var(--text-light); font-size: 0.95rem; line-height: 1.7; }
+        .faq-item.active .faq-answer { max-height: 300px; padding: 0 24px 20px; }
         .faq-item.active .faq-icon { transform: rotate(45deg); }
 
         .contact-section { background: var(--primary); color: #fff; }
@@ -314,131 +301,56 @@
         .contact-row { display: grid; grid-template-columns: 1fr 1.1fr; gap: 50px; }
         .contact-info { display: flex; flex-direction: column; gap: 25px; }
         .cinfo-item { display: flex; gap: 16px; align-items: flex-start; }
-        .cinfo-icon {
-            width: 48px; height: 48px; background: rgba(255,255,255,0.1); border-radius: 14px;
-            display: flex; align-items: center; justify-content: center; color: var(--accent-light);
-            font-size: 1.2rem; flex-shrink: 0;
-        }
+        .cinfo-icon { width: 48px; height: 48px; background: rgba(255,255,255,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--accent-light); font-size: 1.2rem; flex-shrink: 0; }
         .social-links { display: flex; gap: 14px; margin-top: 8px; }
-        .social-links a {
-            width: 44px; height: 44px; background: rgba(255,255,255,0.1); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; color: var(--accent-light);
-            font-size: 1.2rem; transition: var(--transition);
-        }
+        .social-links a { width: 44px; height: 44px; background: rgba(255,255,255,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--accent-light); font-size: 1.2rem; transition: var(--transition); text-decoration: none; }
         .social-links a:hover { background: var(--accent); color: #fff; transform: translateY(-3px); }
-        .contact-form-card {
-            background: #fff; border-radius: var(--radius); padding: 45px 40px;
-            color: var(--text); box-shadow: var(--shadow-lg);
-        }
-        .contact-form-card h3 { font-family: 'Playfair Display', serif; margin-bottom: 6px; }
-        .contact-form-card .subtitle { color: var(--text-light); font-size: 0.9rem; margin-bottom: 24px; }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 13px 16px; border: 2px solid var(--border); border-radius: 12px;
-            font-family: 'DM Sans', sans-serif; font-size: 0.95rem; transition: var(--transition);
-            background: var(--bg-gray);
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: var(--accent); outline: none; background: #fff;
-            box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
-        }
 
         footer { text-align: center; padding: 28px; font-size: 0.9rem; color: var(--text-light); border-top: 1px solid var(--border); }
 
-        .wa-float {
-            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
-            background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 2rem; z-index: 999; box-shadow: 0 12px 35px rgba(37,211,102,0.4);
-            text-decoration: none; transition: var(--transition); animation: pulseGlow 2s infinite;
-        }
+        .wa-float { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 2rem; z-index: 999; box-shadow: 0 12px 35px rgba(37,211,102,0.4); text-decoration: none; transition: var(--transition); animation: pulseGlow 2s infinite; }
         .wa-float:hover { transform: scale(1.15); }
 
-        .toast-wrap {
-            position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
-            z-index: 10001; display: flex; flex-direction: column; gap: 12px; pointer-events: none;
-        }
-        .toast {
-            background: #fff; color: var(--text); padding: 16px 32px; border-radius: 50px;
-            font-weight: 600; font-size: 1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-            display: flex; align-items: center; gap: 12px;
-            transform: translateY(-130px); opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            white-space: nowrap; pointer-events: auto;
-        }
+        .toast-wrap { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); z-index: 10001; display: flex; flex-direction: column; gap: 12px; pointer-events: none; }
+        .toast { background: #fff; color: var(--text); padding: 16px 32px; border-radius: 50px; font-weight: 600; font-size: 1rem; box-shadow: 0 20px 50px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 12px; transform: translateY(-130px); opacity: 0; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); white-space: nowrap; pointer-events: auto; }
         .toast.show { transform: translateY(0); opacity: 1; }
-        .toast i { color: #22c55e; font-size: 1.3rem; }
+        .toast i { font-size: 1.3rem; }
+        .toast.success i { color: #22c55e; }
+        .toast.error i { color: #ef4444; }
 
-        /* Chatbot */
-        .chatbot-toggle {
-            position: fixed; bottom: 100px; right: 30px; width: 60px; height: 60px;
-            background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 1.8rem; z-index: 998; box-shadow: 0 10px 30px rgba(37,99,235,0.4);
-            cursor: pointer; transition: var(--transition); border: none;
-        }
+        .chatbot-toggle { position: fixed; bottom: 100px; right: 30px; width: 60px; height: 60px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.8rem; z-index: 998; box-shadow: 0 10px 30px rgba(37,99,235,0.4); cursor: pointer; transition: var(--transition); border: none; }
         .chatbot-toggle:hover { transform: scale(1.1); }
-        .chatbot-window {
-            position: fixed; bottom: 170px; right: 30px; width: 360px; height: 500px;
-            background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-lg);
-            display: flex; flex-direction: column; overflow: hidden; z-index: 997;
-            transform: scale(0); transform-origin: bottom right;
-            transition: transform 0.3s ease;
-        }
+        .chatbot-window { position: fixed; bottom: 170px; right: 30px; width: 360px; height: 500px; background: #fff; border-radius: var(--radius); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; overflow: hidden; z-index: 997; transform: scale(0); transform-origin: bottom right; transition: transform 0.3s ease; }
         .chatbot-window.open { transform: scale(1); }
-        .chatbot-header {
-            background: var(--accent); color: #fff; padding: 14px 20px;
-            font-weight: 700; display: flex; justify-content: space-between; align-items: center;
-        }
-        .chatbot-header button { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
-        .chatbot-messages {
-            flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px;
-        }
-        .chatbot-message {
-            max-width: 80%; padding: 10px 16px; border-radius: 18px; font-size: 0.9rem;
-            line-height: 1.5; animation: fadeIn 0.3s ease;
-        }
-        .chatbot-message.bot {
-            background: var(--bg-gray); align-self: flex-start; border-bottom-left-radius: 4px;
-        }
-        .chatbot-message.user {
-            background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px;
-        }
-        .chatbot-input-area {
-            display: flex; padding: 10px; border-top: 1px solid var(--border); gap: 8px;
-        }
-        .chatbot-input-area input {
-            flex: 1; padding: 10px 14px; border: 2px solid var(--border); border-radius: 25px;
-            font-size: 0.9rem; outline: none;
-        }
+        .chatbot-header { background: var(--accent); color: #fff; padding: 14px 20px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .chatbot-header button { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; padding: 0 4px; }
+        .chatbot-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+        .chatbot-message { max-width: 80%; padding: 10px 16px; border-radius: 18px; font-size: 0.9rem; line-height: 1.5; animation: fadeIn 0.3s ease; word-break: break-word; }
+        .chatbot-message.bot { background: var(--bg-gray); align-self: flex-start; border-bottom-left-radius: 4px; }
+        .chatbot-message.user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chatbot-input-area { display: flex; padding: 10px; border-top: 1px solid var(--border); gap: 8px; }
+        .chatbot-input-area input { flex: 1; padding: 10px 14px; border: 2px solid var(--border); border-radius: 25px; font-size: 0.9rem; outline: none; font-family: 'DM Sans', sans-serif; }
         .chatbot-input-area input:focus { border-color: var(--accent); }
-        .chatbot-input-area button {
-            background: var(--accent); color: #fff; border: none; width: 40px; height: 40px;
-            border-radius: 50%; cursor: pointer; transition: var(--transition);
-        }
+        .chatbot-input-area button { background: var(--accent); color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: var(--transition); flex-shrink: 0; }
         .chatbot-input-area button:hover { background: var(--accent-dark); }
-        .chatbot-questions {
-            padding: 10px 16px; display: flex; gap: 8px; overflow-x: auto;
-            border-top: 1px solid var(--border); white-space: nowrap;
-        }
-        .chatbot-question-btn {
-            background: var(--bg-gray); border: 1px solid var(--border); border-radius: 20px;
-            padding: 8px 16px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
-            transition: var(--transition); white-space: nowrap; flex-shrink: 0;
-        }
+        .chatbot-questions { padding: 10px 16px; display: flex; gap: 8px; overflow-x: auto; border-top: 1px solid var(--border); white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+        .chatbot-questions::-webkit-scrollbar { height: 4px; }
+        .chatbot-questions::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .chatbot-question-btn { background: var(--bg-gray); border: 1px solid var(--border); border-radius: 20px; padding: 8px 16px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: var(--transition); white-space: nowrap; flex-shrink: 0; font-family: 'DM Sans', sans-serif; }
         .chatbot-question-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
         @media (max-width: 1024px) {
             .hero-content { grid-template-columns: 1fr; text-align: center; }
             .hero-visual { display: none; }
             .hero h1 { font-size: 3.2rem; }
+            .hero p { max-width: 100%; }
+            .hero-btns { justify-content: center; }
             .about-row, .contact-row { grid-template-columns: 1fr; }
             .story-banner { height: 350px; }
+            .story-banner .banner-text h2 { font-size: 2.5rem; }
         }
         @media (max-width: 768px) {
-            .nav-links {
-                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
-                background: #fff; flex-direction: column; justify-content: center; gap: 30px;
-                transition: var(--transition); box-shadow: -15px 0 40px rgba(0,0,0,0.1);
-            }
+            .nav-links { position: fixed; top: 0; right: -100%; width: 80%; height: 100vh; background: #fff; flex-direction: column; justify-content: center; gap: 30px; transition: var(--transition); box-shadow: -15px 0 40px rgba(0,0,0,0.1); }
             .nav-links.active { right: 0; }
             .hamburger { display: flex; }
             .section { padding: 70px 20px; }
@@ -446,23 +358,40 @@
             .hero h1 { font-size: 2.5rem; }
             .counter-row { grid-template-columns: 1fr 1fr; }
             .toast-wrap { top: 20px; left: 20px; right: 20px; transform: none; }
-            .toast { white-space: normal; text-align: center; }
-            .chatbot-window { width: calc(100vw - 40px); right: 20px; height: 450px; }
+            .toast { white-space: normal; text-align: center; border-radius: 16px; padding: 14px 20px; }
+            .chatbot-window { width: calc(100vw - 40px); right: 20px; height: 450px; bottom: 160px; }
+            .chatbot-toggle { bottom: 90px; right: 20px; }
+            .wa-float { bottom: 20px; right: 20px; }
         }
         @media (max-width: 480px) {
             .hero h1 { font-size: 2rem; }
             .feature-grid { grid-template-columns: 1fr; }
             .counter-row { grid-template-columns: 1fr; }
             .faculty-grid { grid-template-columns: 1fr 1fr; }
+            .enquiry-card, .contact-form-card { padding: 30px 22px; }
         }
     </style>
 </head>
 <body>
+    <!-- Preloader – disappears in 50 ms after all images load -->
+    <div id="preloader">
+        <div class="loader-logo">
+            <img src="https://i.ibb.co/Vc0K5RqG/IMG-20260628-WA0024.jpg" alt="Coral Minds Logo" width="80" height="80">
+        </div>
+        <div class="loader-spinner">
+            <span class="loader-dot"></span>
+            <span class="loader-dot"></span>
+            <span class="loader-dot"></span>
+        </div>
+        <div class="loader-text" id="loaderText">Shaping Futures...</div>
+    </div>
+
+    <!-- Main website (identical to before) -->
     <div class="toast-wrap" id="toastWrap"></div>
 
     <nav class="navbar" id="navbar">
         <a href="#" class="brand">
-            <img src="https://i.ibb.co/Vc0K5RqG/IMG-20260628-WA0024.jpg" alt="Logo" loading="lazy" decoding="async">
+            <img src="https://i.ibb.co/Vc0K5RqG/IMG-20260628-WA0024.jpg" alt="Coral Minds Logo" width="46" height="46" loading="eager" decoding="async">
             <div class="brand-text">
                 <h2>CORAL MINDS</h2>
                 <span>The Education Revolution</span>
@@ -479,9 +408,9 @@
             <li><a href="#contact">Contact</a></li>
             <li><a href="tel:7006442922" class="nav-cta">📞 Enquire Now</a></li>
         </ul>
-        <div class="hamburger" id="hamburger">
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" type="button">
             <span></span><span></span><span></span>
-        </div>
+        </button>
     </nav>
 
     <section class="hero" id="home">
@@ -496,7 +425,7 @@
                 </div>
             </div>
             <div class="hero-visual fade-up">
-                <img src="https://i.ibb.co/hxmpp45V/IMG-20260624-WA0014.jpg" alt="Coral Minds" class="hero-img-main" loading="lazy" decoding="async">
+                <img src="https://i.ibb.co/hxmpp45V/IMG-20260624-WA0014.jpg" alt="Coral Minds - Expert Coaching in Srinagar" class="hero-img-main" width="400" height="400" loading="eager" fetchpriority="high" decoding="async" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22><rect fill=%22%233b82f6%22 width=%22400%22 height=%22400%22 rx=%22200%22/><text fill=%22white%22 x=%22200%22 y=%22200%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2260%22>CM</text></svg>'">
                 <div class="hero-stat top"><div class="num">14+</div><div class="lbl">Years Experience</div></div>
                 <div class="hero-stat bottom"><div class="num">5000+</div><div class="lbl">Students Guided</div></div>
             </div>
@@ -507,13 +436,16 @@
         <div class="enquiry-card fade-up">
             <h3>Enquire Now</h3>
             <p class="subtitle">Fill the form — we'll call you back within 2 hours.</p>
-            <form action="https://script.google.com/macros/s/AKfycbyawza62bPLwF2mH16kOvMbMcwfEuZXj1-D1PB8wy95aOQB2Ct12HRxsfeEzv07qZUC/exec" method="POST">
-                <div class="form-group"><label>Student Name *</label><input type="text" name="student_name" required placeholder="Full name"></div>
-                <div class="form-group"><label>Parent Name</label><input type="text" name="parent_name" placeholder="Guardian name"></div>
-                <div class="form-group"><label>Phone Number *</label><input type="tel" name="phone" required placeholder="Phone number"></div>
-                <div class="form-group"><label>Course Interest</label><select name="course"><option value="">Select Course</option><option>Class 8-10</option><option>Medical (NEET)</option><option>Non-Medical (JEE)</option><option>Arts</option><option>JKSSB / Competitive</option></select></div>
-                <div class="form-group"><label>Message</label><textarea name="message" rows="3" placeholder="Optional..."></textarea></div>
-                <button type="submit" class="btn-submit">Submit Enquiry <i class="fas fa-paper-plane"></i></button>
+            <form id="enquiryForm1" data-form-type="enquiry">
+                <div class="form-group"><label for="student_name1">Student Name *</label><input type="text" name="student_name" id="student_name1" required placeholder="Full name" autocomplete="name"></div>
+                <div class="form-group"><label for="parent_name1">Parent Name</label><input type="text" name="parent_name" id="parent_name1" placeholder="Guardian name" autocomplete="name"></div>
+                <div class="form-group"><label for="phone1">Phone Number *</label><input type="tel" name="phone" id="phone1" required placeholder="Phone number" autocomplete="tel"></div>
+                <div class="form-group"><label for="course1">Course Interest</label><select name="course" id="course1"><option value="">Select Course</option><option>Class 8-10</option><option>Medical (NEET)</option><option>Non-Medical (JEE)</option><option>Arts</option><option>JKSSB / Competitive</option></select></div>
+                <div class="form-group"><label for="message1">Message</label><textarea name="message" id="message1" rows="3" placeholder="Optional..."></textarea></div>
+                <button type="submit" class="btn-submit" id="submitBtn1">
+                    <span class="spinner"></span>
+                    <span class="btn-text">Submit Enquiry <i class="fas fa-paper-plane"></i></span>
+                </button>
             </form>
         </div>
     </section>
@@ -530,7 +462,7 @@
             <div class="sec-header fade-up"><div class="sec-label">About Us</div><h2 class="sec-title">Why Coral Minds Stands Out</h2><div class="sec-line"></div></div>
             <div class="about-row">
                 <div class="fade-up">
-                    <img src="https://i.ibb.co/4qNhnCT/IMG-20260625-WA0012.jpg" alt="Founder - Aabid Sir" class="founder-photo" loading="lazy" decoding="async">
+                    <img src="https://i.ibb.co/4qNhnCT/IMG-20260625-WA0012.jpg" alt="Founder - Aabid Sir at Coral Minds" class="founder-photo" width="600" height="600" loading="lazy" decoding="async" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22600%22><rect fill=%22%23e2e8f0%22 width=%22600%22 height=%22600%22 rx=%2220%22/><text fill=%22%2394a3b8%22 x=%22300%22 y=%22300%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2240%22>Photo</text></svg>'">
                 </div>
                 <div class="about-text fade-up">
                     <p>Founded by <strong>Mohamad Saleem Malik (Aabid Sir)</strong> and <strong>Insha Zehra</strong>, Coral Minds is built on 14 years of teaching excellence across Jammu, Delhi & Bengaluru. We bring world-class coaching methodologies to Srinagar.</p>
@@ -555,18 +487,7 @@
     <section class="section section-gray" id="faculty">
         <div class="container">
             <div class="sec-header fade-up"><div class="sec-label">Our Faculty</div><h2 class="sec-title">Meet Your Mentors</h2><div class="sec-line"></div></div>
-            <div class="faculty-grid">
-                <div class="fac-card fade-up"><img src="https://i.ibb.co/zW124rbK/download.jpg" alt="Aabid Saleem Sir" class="fac-avatar" loading="lazy" decoding="async"><h4>Aabid Saleem Sir</h4><div class="subj">Physics Lecturer</div></div>
-                <div class="fac-card fade-up"><img src="https://i.ibb.co/q3gg401p/IMG-20260629-WA0025.jpg" alt="Insha Zehra" class="fac-avatar" loading="lazy" decoding="async"><h4>Insha Zehra</h4><div class="subj">Pol Science Lecturer</div></div>
-                <div class="fac-card fade-up"><img src="https://i.ibb.co/rRZNWbyW/1782446317650.png" alt="Nida Zehra Mam" class="fac-avatar" loading="lazy" decoding="async"><h4>Nida Zehra Mam</h4><div class="subj">Lecturer</div></div>
-                <div class="fac-card fade-up"><img src="https://i.ibb.co/3mXbqWkJ/IMG-20260625-WA0036.jpg" alt="Tashooq Sir" class="fac-avatar" loading="lazy" decoding="async"><h4>Tashooq Sir</h4><div class="subj">Zoology Lecturer</div></div>
-                <div class="fac-card fade-up"><img src="https://placehold.co/100x100/eee/999?text=Photo" alt="Muzafar Sir" class="fac-avatar" loading="lazy" decoding="async"><h4>Muzafar Sir</h4><div class="subj">Botany Lecturer</div></div>
-                <div class="fac-card fade-up"><img src="https://i.ibb.co/nN3FPf3Q/IMG-20260625-WA0024.jpg" alt="Shafqat Sir" class="fac-avatar" loading="lazy" decoding="async"><h4>Shafqat Sir</h4><div class="subj">History / Education</div></div>
-                <div class="fac-card fade-up"><img src="https://i.ibb.co/fdrdGxyN/IMG-20260625-WA0034.jpg" alt="Areeba Mam" class="fac-avatar" loading="lazy" decoding="async"><h4>Areeba Mam</h4><div class="subj">History / English</div></div>
-                <div class="fac-card fade-up"><img src="https://i.ibb.co/KZHgQjj/IMG-20260625-WA0033.jpg" alt="Bareera Mam" class="fac-avatar" loading="lazy" decoding="async"><h4>Bareera Mam</h4><div class="subj">English</div></div>
-                <div class="fac-card fade-up"><img src="https://i.ibb.co/99BmwSNv/IMG-20260625-WA0037.jpg" alt="Nusrat Mam" class="fac-avatar" loading="lazy" decoding="async"><h4>Nusrat Mam</h4><div class="subj">Kashmiri / Urdu</div></div>
-                <div class="fac-card fade-up"><img src="https://placehold.co/100x100/eee/999?text=Photo" alt="Saima Mam" class="fac-avatar" loading="lazy" decoding="async"><h4>Saima Mam</h4><div class="subj">Science</div></div>
-            </div>
+            <div class="faculty-grid" id="facultyGrid"></div>
         </div>
     </section>
 
@@ -586,14 +507,7 @@
     <section class="section section-gray" id="gallery">
         <div class="container">
             <div class="sec-header fade-up"><div class="sec-label">Gallery</div><h2 class="sec-title">Moments at Coral Minds</h2><div class="sec-line"></div></div>
-            <div class="gallery-grid">
-                <div class="gallery-item fade-up"><img src="https://i.ibb.co/TBzzCX2w/IMG-20260625-WA0013.jpg" alt="Coral Minds Moment 1" loading="lazy" decoding="async"></div>
-                <div class="gallery-item fade-up"><img src="https://i.ibb.co/8DHkfdfX/IMG-20260625-WA0009.jpg" alt="Coral Minds Moment 2" loading="lazy" decoding="async"></div>
-                <div class="gallery-item fade-up"><img src="https://i.ibb.co/bMv0hGzK/IMG-20260625-WA0007.jpg" alt="Coral Minds Moment 3" loading="lazy" decoding="async"></div>
-                <div class="gallery-item fade-up"><img src="https://i.ibb.co/WWD8vgKZ/IMG-20260625-WA0006.jpg" alt="Coral Minds Moment 4" loading="lazy" decoding="async"></div>
-                <div class="gallery-item fade-up"><img src="https://i.ibb.co/NgR3HDVW/IMG-20260625-WA0017.jpg" alt="Coral Minds Moment 5" loading="lazy" decoding="async"></div>
-                <div class="gallery-item fade-up"><img src="https://i.ibb.co/RTDYW7bg/IMG-20260625-WA0010.jpg" alt="Coral Minds Moment 6" loading="lazy" decoding="async"></div>
-            </div>
+            <div class="gallery-grid" id="galleryGrid"></div>
         </div>
     </section>
 
@@ -618,29 +532,32 @@
                 <div class="contact-info fade-up">
                     <div class="cinfo-item"><div class="cinfo-icon"><i class="fas fa-map-marker-alt"></i></div><div><strong>Visit Us</strong><br><span style="opacity:0.8;">Hawal Chowk, Near Albaik Restaurant, Srinagar – 190001</span></div></div>
                     <div class="cinfo-item"><div class="cinfo-icon"><i class="fas fa-phone"></i></div><div><strong>Call</strong><br><a href="tel:7006442922" style="color:#93c5fd;">7006442922</a><br><a href="tel:8082855834" style="color:#93c5fd;">8082855834</a></div></div>
-                    <div class="cinfo-item"><div class="cinfo-icon"><i class="fas fa-map"></i></div><div><strong>Google Maps</strong><br><a href="https://share.google/5nnuuu76wnPz30e3s" target="_blank" style="color:#93c5fd;">View Location →</a></div></div>
+                    <div class="cinfo-item"><div class="cinfo-icon"><i class="fas fa-map"></i></div><div><strong>Google Maps</strong><br><a href="https://www.google.com/maps/search/Hawal+Chowk+Near+Albaik+Restaurant+Srinagar+190001" target="_blank" rel="noopener noreferrer" style="color:#93c5fd;">View Location →</a></div></div>
                     <div class="cinfo-item">
                         <div class="cinfo-icon"><i class="fas fa-share-alt"></i></div>
                         <div><strong>Follow Us</strong>
                             <div class="social-links">
-                                <a href="https://www.instagram.com/coral_minds?igsh=YXk2OGgzNXpzZHlp&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
-                                <a href="https://www.facebook.com/share/17R1Ny19oc/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                <a href="https://youtube.com/@coralminds?si=ieGjw2MLts_qrbVC" target="_blank"><i class="fab fa-youtube"></i></a>
+                                <a href="https://www.instagram.com/coral_minds?igsh=YXk2OGgzNXpzZHlp&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                                <a href="https://www.facebook.com/share/17R1Ny19oc/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="https://youtube.com/@coralminds?si=ieGjw2MLts_qrbVC" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                             </div>
                         </div>
                     </div>
-                    <a href="https://wa.me/917006442922" target="_blank" class="btn btn-fill" style="justify-content:center;background:#25D366;"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+                    <a href="https://wa.me/917006442922" target="_blank" rel="noopener noreferrer" class="btn btn-fill" style="justify-content:center;background:#25D366;color:#fff;"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
                 </div>
                 <div class="contact-form-card fade-up">
                     <h3>Enquire Now</h3>
                     <p class="subtitle">Fill the form — we'll call back within 2 hours.</p>
-                    <form action="https://script.google.com/macros/s/AKfycbyawza62bPLwF2mH16kOvMbMcwfEuZXj1-D1PB8wy95aOQB2Ct12HRxsfeEzv07qZUC/exec" method="POST">
-                        <div class="form-group"><label>Student Name *</label><input type="text" name="student_name" required placeholder="Full name"></div>
-                        <div class="form-group"><label>Parent Name</label><input type="text" name="parent_name" placeholder="Guardian name"></div>
-                        <div class="form-group"><label>Phone Number *</label><input type="tel" name="phone" required placeholder="Phone number"></div>
-                        <div class="form-group"><label>Course Interest</label><select name="course"><option value="">Select Course</option><option>Class 8-10</option><option>Medical (NEET)</option><option>Non-Medical (JEE)</option><option>Arts</option><option>JKSSB / Competitive</option></select></div>
-                        <div class="form-group"><label>Message</label><textarea name="message" rows="3" placeholder="Optional..."></textarea></div>
-                        <button type="submit" class="btn-submit">Submit Enquiry <i class="fas fa-paper-plane"></i></button>
+                    <form id="enquiryForm2" data-form-type="contact">
+                        <div class="form-group"><label for="student_name2">Student Name *</label><input type="text" name="student_name" id="student_name2" required placeholder="Full name" autocomplete="name"></div>
+                        <div class="form-group"><label for="parent_name2">Parent Name</label><input type="text" name="parent_name" id="parent_name2" placeholder="Guardian name" autocomplete="name"></div>
+                        <div class="form-group"><label for="phone2">Phone Number *</label><input type="tel" name="phone" id="phone2" required placeholder="Phone number" autocomplete="tel"></div>
+                        <div class="form-group"><label for="course2">Course Interest</label><select name="course" id="course2"><option value="">Select Course</option><option>Class 8-10</option><option>Medical (NEET)</option><option>Non-Medical (JEE)</option><option>Arts</option><option>JKSSB / Competitive</option></select></div>
+                        <div class="form-group"><label for="message2">Message</label><textarea name="message" id="message2" rows="3" placeholder="Optional..."></textarea></div>
+                        <button type="submit" class="btn-submit" id="submitBtn2">
+                            <span class="spinner"></span>
+                            <span class="btn-text">Submit Enquiry <i class="fas fa-paper-plane"></i></span>
+                        </button>
                     </form>
                 </div>
             </div>
@@ -649,215 +566,381 @@
 
     <footer>© 2025 Coral Minds Coaching Centre. All rights reserved. | Hawal Chowk, Near Albaik Restaurant, Srinagar – 190001</footer>
 
-    <a href="https://wa.me/917006442922" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://wa.me/917006442922" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
 
-    <!-- Chatbot -->
-    <button class="chatbot-toggle" id="chatbotToggle" title="Ask a question"><i class="fas fa-comment-dots"></i></button>
+    <button class="chatbot-toggle" id="chatbotToggle" title="Ask a question" type="button" aria-label="Open chat assistant"><i class="fas fa-comment-dots"></i></button>
     <div class="chatbot-window" id="chatbotWindow">
         <div class="chatbot-header">
             <span>💬 Coral Minds Assistant</span>
-            <button id="chatbotClose">&times;</button>
+            <button id="chatbotClose" type="button" aria-label="Close chat">&times;</button>
         </div>
         <div class="chatbot-messages" id="chatbotMessages"></div>
         <div class="chatbot-questions" id="chatbotQuestions"></div>
         <div class="chatbot-input-area">
-            <input type="text" id="chatbotInput" placeholder="Type your question...">
-            <button id="chatbotSend"><i class="fas fa-paper-plane"></i></button>
+            <input type="text" id="chatbotInput" placeholder="Type your question..." aria-label="Type your question">
+            <button id="chatbotSend" type="button" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
     <script>
-        // Mobile menu
-        document.getElementById('hamburger').addEventListener('click', () => document.getElementById('navLinks').classList.toggle('active'));
-        document.querySelectorAll('.nav-links a').forEach(l => l.addEventListener('click', () => document.getElementById('navLinks').classList.remove('active')));
-        window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20));
+        (function() {
+            // ──────────────────────────────────────
+            // Random preloader tagline
+            // ──────────────────────────────────────
+            const taglines = [
+                "Shaping Futures...",
+                "Building Concepts...",
+                "Igniting Curiosity...",
+                "Inspiring Excellence...",
+                "Unlocking Potential...",
+                "Creating Leaders...",
+                "Nurturing Brilliance...",
+                "Empowering Minds..."
+            ];
+            const loaderText = document.getElementById('loaderText');
+            if (loaderText) {
+                loaderText.textContent = taglines[Math.floor(Math.random() * taglines.length)];
+            }
 
-        // Fade-up animation
-        const fadeEls = document.querySelectorAll('.fade-up');
-        const fadeObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    fadeObserver.unobserve(entry.target);
+            // ──────────────────────────────────────
+            // Ultra‑fast preloader logic (minimum 50 ms after load)
+            // ──────────────────────────────────────
+            const preloader = document.getElementById('preloader');
+            const startTime = Date.now();
+            const MIN_DELAY = 50;  // only 0.05 seconds extra – virtually instant
+            const MAX_DELAY = 4000; // safety timeout
+
+            function hideLoader() {
+                document.body.classList.add('loaded');
+                setTimeout(() => {
+                    if (preloader && preloader.parentNode) {
+                        preloader.parentNode.removeChild(preloader);
+                    }
+                }, 300); // matches the 0.3s CSS transition
+            }
+
+            function attemptHide() {
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, MIN_DELAY - elapsed);
+                setTimeout(hideLoader, remaining);
+            }
+
+            const safetyTimer = setTimeout(() => {
+                if (!document.body.classList.contains('loaded')) {
+                    hideLoader();
                 }
+            }, MAX_DELAY);
+
+            window.addEventListener('load', function() {
+                clearTimeout(safetyTimer);
+                attemptHide();
             });
-        }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
-        fadeEls.forEach(el => fadeObserver.observe(el));
 
-        // Counters
-        document.querySelectorAll('.cnum').forEach(c => {
-            const obs = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting) {
-                    const el = entries[0].target;
-                    const target = +el.getAttribute('data-count');
-                    let count = 0;
-                    const speed = Math.ceil(target / 60);
-                    const upd = () => {
-                        count += speed;
-                        if (count < target) { el.textContent = count; requestAnimationFrame(upd); }
-                        else { el.textContent = target + (target === 100 ? '%' : '+'); }
-                    };
-                    upd();
-                    obs.unobserve(el);
-                }
+            if (document.readyState === 'complete') {
+                clearTimeout(safetyTimer);
+                attemptHide();
+            }
+
+            // ──────────────────────────────────────
+            // Google Sheets Web App URL
+            // ──────────────────────────────────────
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyawza62bPLwF2mH16kOvMbMcwfEuZXj1-D1PB8wy95aOQB2Ct12HRxsfeEzv07qZUC/exec';
+
+            // Mobile menu
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
+            document.querySelectorAll('.nav-links a').forEach(l =>
+                l.addEventListener('click', () => navLinks.classList.remove('active'))
+            );
+            window.addEventListener('scroll', () => {
+                document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+            });
+
+            // Fade-up animation
+            const fadeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        fadeObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+            document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
+
+            // Counter animation
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = +el.getAttribute('data-count');
+                        let count = 0;
+                        const speed = Math.max(1, Math.ceil(target / 60));
+                        const upd = () => {
+                            count += speed;
+                            if (count < target) {
+                                el.textContent = count;
+                                requestAnimationFrame(upd);
+                            } else {
+                                el.textContent = target + (target === 100 ? '%' : '+');
+                            }
+                        };
+                        upd();
+                        counterObserver.unobserve(el);
+                    }
+                });
             }, { threshold: 0.6 });
-            obs.observe(c);
-        });
+            document.querySelectorAll('.cnum').forEach(c => counterObserver.observe(c));
 
-        // Testimonials
-        const names = ["Uroosha","Ubaid","Aiman","Wajahat","Azra","Aatir","Sahil","Zeshana","Seerat","Soni","Aiman","Marufa","Seerat","Iqra","Safiya"];
-        const scores = ["441","430","422","425","377","379","359","337","333","358","352","353","389","340+","300+"];
-        const statements = [
-            "The teachers here have an incredible gift for making the most complex topics feel simple. I went from dreading certain subjects to actually looking forward to the classes.",
-            "What sets this coaching apart is the sheer dedication of the faculty. They stayed back late so many times just to ensure I fully understood the core concepts.",
-            "This wasn't just a place to get notes; the teachers actively mentored us. They guided me through my stress and helped me build a realistic study schedule.",
-            "The classes were always engaging and full of energy. The teachers used practical examples that made learning feel natural rather than like a chore.",
-            "I owe my smooth board exam experience to the brilliant strategies taught here. The faculty trained us exactly on how to structure our answers and manage the clock.",
-            "The teachers never let me give up. Even when the board syllabus felt incredibly overwhelming, their constant encouragement kept me focused and motivated.",
-            "The faculty is so approachable that I never once hesitated to ask a question. They have the patience to explain a single concept multiple times until it clicks.",
-            "While the study materials were excellent, it was the teachers' classroom delivery that made the real difference. They built our foundation from the ground up.",
-            "The personalized attention I received was unmatched. The teachers identified exactly which chapters I was struggling with and provided targeted practice just for me.",
-            "The end-of-year revision batches conducted by the teachers were an absolute lifesaver. They summarized the entire syllabus flawlessly right before the exams.",
-            "You can truly see the passion the teachers have for their subjects. They never just rushed to finish the syllabus; they made sure the entire class was on the same page.",
-            "The feedback from the faculty on our practice papers was a game-changer. They sat with me to point out my recurring mistakes and showed me exactly how to fix them.",
-            "From the first day of class until the morning of the final exam, the coaching staff was by our side. Their continuous support gave me so much confidence.",
-            "I joined this coaching with a lot of doubts about my own abilities, but the teachers completely rebuilt my foundation. They taught me how to study smarter, not just harder.",
-            "The post-mock test discussions led by the teachers were incredibly insightful. They didn't just give us the right answers; they taught us how to think through the questions logically."
-        ];
-        const grid = document.getElementById('testimonialGrid');
-        for (let i = 0; i < names.length; i++) {
-            const card = document.createElement('div');
-            card.className = 'test-card fade-up';
-            card.innerHTML = `
-                <img src="https://placehold.co/100x100/3b82f6/white?text=Student+${i+1}" alt="Student" class="test-avatar" loading="lazy" decoding="async">
-                <div class="test-stars">⭐⭐⭐⭐⭐</div>
-                <p class="test-text">"${statements[i]}"</p>
-                <div class="test-auth">${names[i]}</div>
-                <div class="test-role">12th | Score: ${scores[i]}</div>
-            `;
-            grid.appendChild(card);
-            fadeObserver.observe(card);
-        }
-
-        // FAQ data (used for accordion & chatbot)
-        const faqs = [
-            { q: "What courses does Coral Minds offer?", a: "We provide coaching for Classes 8th to 12th, covering NEET, JEE, and JKSSB, with a strong focus on conceptual learning and academic excellence." },
-            { q: "Who can join Coral Minds?", a: "Any student from Classes 8–12 who wants to improve academic performance, prepare for board examinations, or strengthen subject fundamentals is welcome." },
-            { q: "How can I take admission?", a: "Visit our centre at Hawal Chowk, Near Albaik Restaurant, Srinagar, or contact us via our website or phone to complete the admission process." },
-            { q: "Do you offer demo classes?", a: "Yes, demo classes are available so students can experience our teaching methodology before enrolling." },
-            { q: "What makes Coral Minds different from other coaching centres?", a: "Our strengths include experienced faculty, concept-based teaching, regular assessments, personalised attention, doubt-clearing sessions, and continuous progress monitoring." },
-            { q: "How many students are there in each batch?", a: "We maintain limited batch sizes to ensure every student receives individual attention and meaningful classroom interaction." },
-            { q: "Are regular tests conducted?", a: "Yes. We conduct weekly tests, monthly assessments, and revision exams to evaluate progress and improve performance." },
-            { q: "Do you provide study material?", a: "Yes. Students receive comprehensive notes, worksheets, assignments, and exam-oriented practice material prepared by our faculty." },
-            { q: "How do you help students who are weak in studies?", a: "We identify learning gaps, conduct doubt-clearing sessions, provide extra guidance when needed, and continuously monitor progress to help every student improve." },
-            { q: "Do parents receive updates about their child's progress?", a: "Yes. Parents are regularly informed about attendance, test performance, and overall academic progress." },
-            { q: "Which board do you follow?", a: "Our teaching is primarily aligned with the JKBOSE, CBSE curriculum while building strong conceptual understanding." },
-            { q: "What are your class timings?", a: "We offer multiple batches for different classes. Please contact us to know the latest schedule and batch availability." },
-            { q: "Is there a refund policy?", a: "Please contact our office for detailed information regarding our admission and fee policies." },
-            { q: "Where is Coral Minds located?", a: "Coral Minds Coaching Centre, Hawal Chowk, Near Albaik Restaurant, Srinagar – 190001." },
-            { q: "How can I contact Coral Minds?", a: "You can call us, visit our centre, or submit your inquiry through the contact form on our website. Our team will get back to you as soon as possible." }
-        ];
-
-        // FAQ accordion
-        const faqContainer = document.getElementById('faqAccordion');
-        faqs.forEach(faq => {
-            const item = document.createElement('div');
-            item.className = 'faq-item fade-up';
-            item.innerHTML = `
-                <button class="faq-question">${faq.q} <span class="faq-icon">+</span></button>
-                <div class="faq-answer">${faq.a}</div>
-            `;
-            faqContainer.appendChild(item);
-            fadeObserver.observe(item);
-            item.querySelector('.faq-question').addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-                if (!isActive) item.classList.add('active');
-            });
-        });
-
-        // --- CHATBOT ---
-        const chatbotToggle = document.getElementById('chatbotToggle');
-        const chatbotWindow = document.getElementById('chatbotWindow');
-        const chatbotClose = document.getElementById('chatbotClose');
-        const chatbotMessages = document.getElementById('chatbotMessages');
-        const chatbotQuestions = document.getElementById('chatbotQuestions');
-        const chatbotInput = document.getElementById('chatbotInput');
-        const chatbotSend = document.getElementById('chatbotSend');
-
-        chatbotToggle.addEventListener('click', () => {
-            chatbotWindow.classList.toggle('open');
-            if (chatbotWindow.classList.contains('open') && chatbotMessages.children.length === 0) {
-                addBotMessage("👋 Hello! I'm your Coral Minds assistant. Scroll through the quick questions below or type your own!");
+            // Toast notification
+            function showToast(msg, type = 'success') {
+                const wrap = document.getElementById('toastWrap');
+                const t = document.createElement('div');
+                t.className = 'toast ' + type;
+                const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+                t.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+                wrap.appendChild(t);
+                requestAnimationFrame(() => t.classList.add('show'));
+                setTimeout(() => {
+                    t.classList.remove('show');
+                    setTimeout(() => t.remove(), 500);
+                }, 4000);
             }
-        });
-        chatbotClose.addEventListener('click', () => chatbotWindow.classList.remove('open'));
 
-        function addBotMessage(text) {
-            const msg = document.createElement('div');
-            msg.className = 'chatbot-message bot';
-            msg.textContent = text;
-            chatbotMessages.appendChild(msg);
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-        }
-
-        function addUserMessage(text) {
-            const msg = document.createElement('div');
-            msg.className = 'chatbot-message user';
-            msg.textContent = text;
-            chatbotMessages.appendChild(msg);
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-        }
-
-        // Add ALL FAQ questions as scrollable chips
-        faqs.forEach(faq => {
-            const btn = document.createElement('button');
-            btn.className = 'chatbot-question-btn';
-            btn.textContent = faq.q;
-            btn.addEventListener('click', () => {
-                addUserMessage(faq.q);
-                setTimeout(() => addBotMessage(faq.a), 400);
-            });
-            chatbotQuestions.appendChild(btn);
-        });
-
-        function handleUserInput(text) {
-            if (!text.trim()) return;
-            addUserMessage(text);
-            const lowerText = text.toLowerCase();
-            const matchedFaq = faqs.find(faq => {
-                const q = faq.q.toLowerCase();
-                const a = faq.a.toLowerCase();
-                return q.includes(lowerText) || a.includes(lowerText) || lowerText.includes(q) || lowerText.includes(a);
-            });
-            if (matchedFaq) {
-                setTimeout(() => addBotMessage(matchedFaq.a), 500);
-            } else {
-                setTimeout(() => addBotMessage("I'm not sure about that. You can call us directly at 📞 7006442922 or submit an enquiry and we'll get back to you."), 500);
+            // AJAX form submission
+            function handleFormSubmit(form, submitBtn) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const phoneInput = form.querySelector('input[name="phone"]');
+                    if (phoneInput && phoneInput.value.trim() && !/^[0-9+\-\s]{7,15}$/.test(phoneInput.value.trim())) {
+                        showToast('Please enter a valid phone number.', 'error');
+                        phoneInput.focus();
+                        return;
+                    }
+                    submitBtn.classList.add('loading');
+                    submitBtn.disabled = true;
+                    const formData = new FormData(form);
+                    try {
+                        const response = await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+                        if (response.ok || response.type === 'basic' || response.type === 'default') {
+                            showToast('✅ Enquiry submitted! We\'ll call you back within 2 hours.', 'success');
+                            form.reset();
+                        } else {
+                            try {
+                                const errData = await response.json();
+                                showToast(errData.message || 'Submission issue. Please try calling us.', 'error');
+                            } catch {
+                                showToast('✅ Enquiry submitted! We\'ll call you back within 2 hours.', 'success');
+                                form.reset();
+                            }
+                        }
+                    } catch (err) {
+                        console.warn('Form fetch failed, attempting fallback...', err);
+                        try {
+                            await fetch(SCRIPT_URL, { method: 'POST', body: new FormData(form), mode: 'no-cors' });
+                            showToast('✅ Enquiry submitted! We\'ll call you back within 2 hours.', 'success');
+                            form.reset();
+                        } catch (fallbackErr) {
+                            showToast('⚠️ Network error. Please call us at 7006442922 to enquire.', 'error');
+                        }
+                    } finally {
+                        submitBtn.classList.remove('loading');
+                        submitBtn.disabled = false;
+                    }
+                });
             }
-        }
 
-        chatbotSend.addEventListener('click', () => {
-            handleUserInput(chatbotInput.value);
-            chatbotInput.value = '';
-        });
-        chatbotInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleUserInput(chatbotInput.value);
-                chatbotInput.value = '';
+            const form1 = document.getElementById('enquiryForm1');
+            const form2 = document.getElementById('enquiryForm2');
+            const submitBtn1 = document.getElementById('submitBtn1');
+            const submitBtn2 = document.getElementById('submitBtn2');
+            if (form1 && submitBtn1) handleFormSubmit(form1, submitBtn1);
+            if (form2 && submitBtn2) handleFormSubmit(form2, submitBtn2);
+
+            // Faculty data
+            const facultyData = [
+                { name: 'Aabid Saleem Sir', subj: 'Physics Lecturer', img: 'https://i.ibb.co/zW124rbK/download.jpg' },
+                { name: 'Insha Zehra', subj: 'Pol Science Lecturer', img: 'https://i.ibb.co/q3gg401p/IMG-20260629-WA0025.jpg' },
+                { name: 'Nida Zehra Mam', subj: 'Lecturer', img: 'https://i.ibb.co/rRZNWbyW/1782446317650.png' },
+                { name: 'Tashooq Sir', subj: 'Zoology Lecturer', img: 'https://i.ibb.co/3mXbqWkJ/IMG-20260625-WA0036.jpg' },
+                { name: 'Muzafar Sir', subj: 'Botany Lecturer', img: '' },
+                { name: 'Shafqat Sir', subj: 'History / Education', img: 'https://i.ibb.co/nN3FPf3Q/IMG-20260625-WA0024.jpg' },
+                { name: 'Areeba Mam', subj: 'History / English', img: 'https://i.ibb.co/fdrdGxyN/IMG-20260625-WA0034.jpg' },
+                { name: 'Bareera Mam', subj: 'English', img: 'https://i.ibb.co/KZHgQjj/IMG-20260625-WA0033.jpg' },
+                { name: 'Nusrat Mam', subj: 'Kashmiri / Urdu', img: 'https://i.ibb.co/99BmwSNv/IMG-20260625-WA0037.jpg' },
+                { name: 'Saima Mam', subj: 'Science', img: '' },
+            ];
+            const facultyGrid = document.getElementById('facultyGrid');
+            const fallbackAvatarSVG = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="85" height="85"><rect fill="#e2e8f0" width="85" height="85" rx="42.5"/><text fill="#94a3b8" x="42.5" y="42.5" text-anchor="middle" dy=".3em" font-size="20">👤</text></svg>');
+            facultyData.forEach(fac => {
+                const card = document.createElement('div');
+                card.className = 'fac-card fade-up';
+                const imgSrc = fac.img || fallbackAvatarSVG;
+                card.innerHTML = `<img src="${imgSrc}" alt="${fac.name}" class="fac-avatar" width="85" height="85" loading="lazy" decoding="async" onerror="this.src='${fallbackAvatarSVG}'"><h4>${fac.name}</h4><div class="subj">${fac.subj}</div>`;
+                facultyGrid.appendChild(card);
+                fadeObserver.observe(card);
+            });
+
+            // Gallery data
+            const galleryImages = [
+                'https://i.ibb.co/TBzzCX2w/IMG-20260625-WA0013.jpg',
+                'https://i.ibb.co/8DHkfdfX/IMG-20260625-WA0009.jpg',
+                'https://i.ibb.co/bMv0hGzK/IMG-20260625-WA0007.jpg',
+                'https://i.ibb.co/WWD8vgKZ/IMG-20260625-WA0006.jpg',
+                'https://i.ibb.co/NgR3HDVW/IMG-20260625-WA0017.jpg',
+                'https://i.ibb.co/RTDYW7bg/IMG-20260625-WA0010.jpg',
+            ];
+            const galleryGrid = document.getElementById('galleryGrid');
+            galleryImages.forEach(src => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item fade-up';
+                item.innerHTML = `<img src="${src}" alt="Coral Minds Moment" width="400" height="300" loading="lazy" decoding="async" onerror="this.parentElement.style.display='none'">`;
+                galleryGrid.appendChild(item);
+                fadeObserver.observe(item);
+            });
+
+            // Testimonials
+            const names = ["Uroosha","Ubaid","Aiman","Wajahat","Azra","Aatir","Sahil","Zeshana","Seerat","Soni","Aiman","Marufa","Seerat","Iqra","Safiya"];
+            const scores = ["441","430","422","425","377","379","359","337","333","358","352","353","389","340+","300+"];
+            const statements = [
+                "The teachers here have an incredible gift for making the most complex topics feel simple. I went from dreading certain subjects to actually looking forward to the classes.",
+                "What sets this coaching apart is the sheer dedication of the faculty. They stayed back late so many times just to ensure I fully understood the core concepts.",
+                "This wasn't just a place to get notes; the teachers actively mentored us. They guided me through my stress and helped me build a realistic study schedule.",
+                "The classes were always engaging and full of energy. The teachers used practical examples that made learning feel natural rather than like a chore.",
+                "I owe my smooth board exam experience to the brilliant strategies taught here. The faculty trained us exactly on how to structure our answers and manage the clock.",
+                "The teachers never let me give up. Even when the board syllabus felt incredibly overwhelming, their constant encouragement kept me focused and motivated.",
+                "The faculty is so approachable that I never once hesitated to ask a question. They have the patience to explain a single concept multiple times until it clicks.",
+                "While the study materials were excellent, it was the teachers' classroom delivery that made the real difference. They built our foundation from the ground up.",
+                "The personalized attention I received was unmatched. The teachers identified exactly which chapters I was struggling with and provided targeted practice just for me.",
+                "The end-of-year revision batches conducted by the teachers were an absolute lifesaver. They summarized the entire syllabus flawlessly right before the exams.",
+                "You can truly see the passion the teachers have for their subjects. They never just rushed to finish the syllabus; they made sure the entire class was on the same page.",
+                "The feedback from the faculty on our practice papers was a game-changer. They sat with me to point out my recurring mistakes and showed me exactly how to fix them.",
+                "From the first day of class until the morning of the final exam, the coaching staff was by our side. Their continuous support gave me so much confidence.",
+                "I joined this coaching with a lot of doubts about my own abilities, but the teachers completely rebuilt my foundation. They taught me how to study smarter, not just harder.",
+                "The post-mock test discussions led by the teachers were incredibly insightful. They didn't just give us the right answers; they taught us how to think through the questions logically."
+            ];
+            const grid = document.getElementById('testimonialGrid');
+            const avatarColors = ['#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981','#6366f1','#14b8a6','#f97316','#06b6d4','#84cc16'];
+            for (let i = 0; i < names.length; i++) {
+                const color = avatarColors[i % avatarColors.length];
+                const initial = names[i].charAt(0).toUpperCase();
+                const avatarSVG = 'data:image/svg+xml,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="70" height="70"><rect fill="${color}" width="70" height="70" rx="35"/><text fill="white" x="35" y="35" text-anchor="middle" dy=".3em" font-size="28" font-weight="bold">${initial}</text></svg>`);
+                const card = document.createElement('div');
+                card.className = 'test-card fade-up';
+                card.innerHTML = `<img src="${avatarSVG}" alt="Student ${names[i]}" class="test-avatar" width="70" height="70" loading="lazy" decoding="async"><div class="test-stars">⭐⭐⭐⭐⭐</div><p class="test-text">"${statements[i]}"</p><div class="test-auth">${names[i]}</div><div class="test-role">12th | Score: ${scores[i]}</div>`;
+                grid.appendChild(card);
+                fadeObserver.observe(card);
             }
-        });
 
-        // Toast
-        function showToast(msg) {
-            const wrap = document.getElementById('toastWrap');
-            const t = document.createElement('div');
-            t.className = 'toast';
-            t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
-            wrap.appendChild(t);
-            requestAnimationFrame(() => t.classList.add('show'));
-            setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 500); }, 3500);
-        }
+            // FAQ data
+            const faqs = [
+                { q: "What courses does Coral Minds offer?", a: "We provide coaching for Classes 8th to 12th, covering NEET, JEE, and JKSSB, with a strong focus on conceptual learning and academic excellence." },
+                { q: "Who can join Coral Minds?", a: "Any student from Classes 8–12 who wants to improve academic performance, prepare for board examinations, or strengthen subject fundamentals is welcome." },
+                { q: "How can I take admission?", a: "Visit our centre at Hawal Chowk, Near Albaik Restaurant, Srinagar, or contact us via our website or phone to complete the admission process." },
+                { q: "Do you offer demo classes?", a: "Yes, demo classes are available so students can experience our teaching methodology before enrolling." },
+                { q: "What makes Coral Minds different from other coaching centres?", a: "Our strengths include experienced faculty, concept-based teaching, regular assessments, personalised attention, doubt-clearing sessions, and continuous progress monitoring." },
+                { q: "How many students are there in each batch?", a: "We maintain limited batch sizes to ensure every student receives individual attention and meaningful classroom interaction." },
+                { q: "Are regular tests conducted?", a: "Yes. We conduct weekly tests, monthly assessments, and revision exams to evaluate progress and improve performance." },
+                { q: "Do you provide study material?", a: "Yes. Students receive comprehensive notes, worksheets, assignments, and exam-oriented practice material prepared by our faculty." },
+                { q: "How do you help students who are weak in studies?", a: "We identify learning gaps, conduct doubt-clearing sessions, provide extra guidance when needed, and continuously monitor progress to help every student improve." },
+                { q: "Do parents receive updates about their child's progress?", a: "Yes. Parents are regularly informed about attendance, test performance, and overall academic progress." },
+                { q: "Which board do you follow?", a: "Our teaching is primarily aligned with the JKBOSE and CBSE curriculum while building strong conceptual understanding." },
+                { q: "What are your class timings?", a: "We offer multiple batches for different classes. Please contact us to know the latest schedule and batch availability." },
+                { q: "Is there a refund policy?", a: "Please contact our office for detailed information regarding our admission and fee policies." },
+                { q: "Where is Coral Minds located?", a: "Coral Minds Coaching Centre, Hawal Chowk, Near Albaik Restaurant, Srinagar – 190001." },
+                { q: "How can I contact Coral Minds?", a: "You can call us at 7006442922 or 8082855834, visit our centre, or submit your inquiry through the contact form on our website. Our team will get back to you as soon as possible." }
+            ];
+            const faqContainer = document.getElementById('faqAccordion');
+            faqs.forEach(faq => {
+                const item = document.createElement('div');
+                item.className = 'faq-item fade-up';
+                item.innerHTML = `<button class="faq-question" type="button">${faq.q} <span class="faq-icon">+</span></button><div class="faq-answer">${faq.a}</div>`;
+                faqContainer.appendChild(item);
+                fadeObserver.observe(item);
+                item.querySelector('.faq-question').addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                    if (!isActive) item.classList.add('active');
+                });
+            });
+
+            // Chatbot
+            const chatbotToggle = document.getElementById('chatbotToggle');
+            const chatbotWindow = document.getElementById('chatbotWindow');
+            const chatbotClose = document.getElementById('chatbotClose');
+            const chatbotMessages = document.getElementById('chatbotMessages');
+            const chatbotQuestions = document.getElementById('chatbotQuestions');
+            const chatbotInput = document.getElementById('chatbotInput');
+            const chatbotSend = document.getElementById('chatbotSend');
+
+            chatbotToggle.addEventListener('click', () => {
+                chatbotWindow.classList.toggle('open');
+                if (chatbotWindow.classList.contains('open') && chatbotMessages.children.length === 0) {
+                    addBotMessage("👋 Hello! I'm your Coral Minds assistant. Scroll through the quick questions below or type your own!");
+                }
+            });
+            chatbotClose.addEventListener('click', () => chatbotWindow.classList.remove('open'));
+
+            function addBotMessage(text) {
+                const msg = document.createElement('div');
+                msg.className = 'chatbot-message bot';
+                msg.textContent = text;
+                chatbotMessages.appendChild(msg);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+            function addUserMessage(text) {
+                const msg = document.createElement('div');
+                msg.className = 'chatbot-message user';
+                msg.textContent = text;
+                chatbotMessages.appendChild(msg);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+
+            faqs.forEach(faq => {
+                const btn = document.createElement('button');
+                btn.className = 'chatbot-question-btn';
+                btn.type = 'button';
+                btn.textContent = faq.q;
+                btn.addEventListener('click', () => {
+                    addUserMessage(faq.q);
+                    setTimeout(() => addBotMessage(faq.a), 400);
+                });
+                chatbotQuestions.appendChild(btn);
+            });
+
+            function handleUserInput(text) {
+                const trimmed = text.trim();
+                if (!trimmed) return;
+                addUserMessage(trimmed);
+                const lowerText = trimmed.toLowerCase();
+                let bestMatch = null;
+                let bestScore = 0;
+                faqs.forEach(faq => {
+                    const qWords = faq.q.toLowerCase().split(/\s+/);
+                    const aWords = faq.a.toLowerCase().split(/\s+/);
+                    const allWords = [...new Set([...qWords, ...aWords])];
+                    let matchCount = 0;
+                    allWords.forEach(word => { if (word.length > 3 && lowerText.includes(word)) matchCount++; });
+                    if (matchCount > bestScore) { bestScore = matchCount; bestMatch = faq; }
+                });
+                if (bestMatch && bestScore >= 2) {
+                    setTimeout(() => addBotMessage(bestMatch.a), 500);
+                } else if (lowerText.includes('call') || lowerText.includes('phone') || lowerText.includes('contact') || lowerText.includes('number')) {
+                    setTimeout(() => addBotMessage("You can reach us at 📞 7006442922 or 8082855834. We're happy to help!"), 500);
+                } else if (lowerText.includes('address') || lowerText.includes('location') || lowerText.includes('where')) {
+                    setTimeout(() => addBotMessage("We're at Hawal Chowk, Near Albaik Restaurant, Srinagar – 190001. 📍"), 500);
+                } else {
+                    setTimeout(() => addBotMessage("I'm not sure about that. You can call us directly at 📞 7006442922 or submit an enquiry form and we'll get back to you within 2 hours."), 500);
+                }
+            }
+
+            chatbotSend.addEventListener('click', () => { handleUserInput(chatbotInput.value); chatbotInput.value = ''; });
+            chatbotInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { handleUserInput(chatbotInput.value); chatbotInput.value = ''; } });
+
+            window._showToast = showToast;
+            console.log('✅ Coral Minds — Fastest load complete.');
+        })();
     </script>
 </body>
-    </html>
+</html>
